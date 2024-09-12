@@ -111,7 +111,7 @@ def send_answer():
 def open_client(email):
     global client
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect(('172.20.0.185', 8000))
+    client.connect(('172.20.0.185', 8000))  # Connect to the server
 
     global window
     window = Tk()
@@ -156,6 +156,7 @@ def open_client(email):
         connection.close()
 
     # Send the username to the server
+    # Receive data
     client.send(username.encode('utf-8'))
 
     # Start a thread to receive messages from the server

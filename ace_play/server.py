@@ -104,8 +104,11 @@ def play():
 
 def run_server():
     try:
+        # Create socket object
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # Bind the socket to a public host, and a port
         server.bind(('0.0.0.0', 8000))
+        # Become a server socket, listen for connections
         server.listen()
         print("Server is listening")
 
@@ -113,15 +116,16 @@ def run_server():
         global barrier
         barrier = threading.Barrier(playerCount)
         while True:
-            client, addr = server.accept()
-            clients.append(client)
+            client, addr = server.accept() # Accept connection
+            clients.append(client)  #Upon accepting a new connection, the client socket is added to the clients list.
             print(f"Connection from {addr} has been established.")
 
             if len(clients)!= playerCount:
                 client.send("Waiting for the other clients...".encode('utf-8'))
             else:
                 broadcastAll("Start")
-            thread = threading.Thread(target=handle, args=(client,))
+            # Each client connection is handled by a separate thread, which calls the handle function for that specific client.
+            thread = threading.Thread(target=handle, args=(client,))    
             thread.start()
 
     except Exception as e:
