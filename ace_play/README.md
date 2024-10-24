@@ -1,14 +1,53 @@
 # ACE PLAY
 This project aims to create a Python-based multiplayer card game using client-server architecture. It manages card distribution, rule enforcement, and winner determination with a unique scoring system. A Tkinter-based GUI displays player hands and scores, while socket programming ensures real-time gameplay. A MySQL database stores player info and game results. The system is scalable for future updates, including AI opponents and new game modes
 
-# HOW TO RUN
-To run the game, one pc must run server.py first. The server computer should have the 'ace_play' mysql database with it's respective tables.
-Tables structure are as follow:
--> card_images (id INT AUTO_INCREMENT PRIMARY KEY, card_rank VARCHAR(10), suit VARCHAR(10), image_path VARCHAR(255))
--> users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(30), email VARCHAR(50), password VARCHAR(50))
-The server will then ask for the number of players to start the game.
+# Game Setup:
+Server:
+Requirements:
 
-According to the number of clients requested, each client computer should run main_window.py. Then the player may either login or sign up to start the game.
+Python 3.x installed.
+mysql.connector, PIL, and tkinter modules.
+A MySQL database setup with card image paths.
+
+
+MySQL Database Setup:
+Create a database named "ace_play" with a table card_images that stores card ranks, suits, and their corresponding image paths.
+CREATE TABLE card_images (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    card_rank VARCHAR(10),
+    suit VARCHAR(10),
+    image_path VARCHAR(255)
+);
+
+Create a "users" table that stores card usernames, email, and user passwords.
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(30),
+    email VARCHAR(50),
+    password VARCHAR(50)
+);
+
+
+Server Configuration:
+
+The server will run on a local machine (eg. IP: 127.0.0.1, Port: 8000) and handle up to 5 players.
+It includes a game logic (Game class), database connection for fetching card image paths, and broadcast functionality to communicate with clients.
+
+Running the Server:
+
+Start the server by running the server.py file. The server will ask for the number of players.
+Once the number of players is reached, the game will start.
+
+
+Client:
+Requirements:
+
+Python 3.x installed.
+mysql.connector, PIL, and tkinter modules.
+Connecting to the Server:
+Players will use the client application (main_window.py) to connect to the server.
+Each player must enter their email, which fetches their username from the MySQL database.
+Once all players are connected, the game begins.
 
 # About the game
 We accept at most 5 players to start the game.
@@ -32,3 +71,23 @@ Rules of the game,
 => For example: Deck (Q,6) VS deck (2,4), deck (Q,6) is the winner.
 
 => For example: Deck (Heart of 7, Club of 2) VS deck (Diamond of 7, Spade of 2), the first deck is the winner.
+
+# Game Flow:
+1. Starting the Game:
+Players are prompted to connect to the server. Once all players join, the server will start the game automatically.
+
+2. Drawing Cards:
+Each player is initially dealt two cards.
+The cards are displayed on the player's screen with images fetched from the MySQL database.
+
+3. Decision to Draw More Cards:
+After the initial deal, players are asked whether they want to draw one more card (by clicking "OK" for yes, or "Cancel" for no).
+If a player chooses to draw another card, it will be displayed in their frame.
+
+4. Broadcasting Card Details:
+Each player’s card details are broadcast to all other players.
+The details are displayed in a scrollable window, showing each player’s username and card images.
+
+5. Announcing the Winner:
+Once all players have finished drawing cards, the server calculates the winner based on the game logic (strongest hand).
+The winner is broadcast to all players, and the game ends.

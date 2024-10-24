@@ -16,10 +16,10 @@ def is_valid_password(password):
 def connect_db():
     try:
         connection = mysql.connector.connect(
-            host='localhost',
+            host='172.20.0.185',
             database='ace_play',
-            user='root',
-            password='09795334737'
+            user='remote_user',
+            password='mypassword123'
         )
         return connection
     except Error as e:

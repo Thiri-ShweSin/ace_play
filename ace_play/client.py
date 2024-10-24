@@ -95,6 +95,8 @@ def receiving(client):
         except Exception as e:
             Label(window, text=f"[ERROR] {e}", bg='#35654d', fg='red').pack()
             break
+    client.close()
+    print("Connection to the server is closed.")
 
 def send_answer():
     # Display a message box with OK and Cancel buttons
